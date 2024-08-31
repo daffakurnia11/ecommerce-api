@@ -1,10 +1,25 @@
-import BaseRoute from "../abstracts/BaseRoute";
+import express, { Router } from "express";
 import ProductController from "../controllers/ProductController";
-import { productValidation } from "../validators/ProductValidator";
 
-class ProductRoute extends BaseRoute {
+class ProductRoute {
+  public router: Router;
+  private controller: any = ProductController;
+
   constructor() {
-    super(ProductController, productValidation);
+    this.router = express.Router();
+    this.initializeRoutes();
+  }
+
+  private initializeRoutes() {
+    this.router.get(
+      "/",
+      this.controller.list
+    );
+
+    this.router.get(
+      "/:id",
+      this.controller.get
+    )
   }
 }
 

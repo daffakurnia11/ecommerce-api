@@ -6,29 +6,53 @@ class BaseRoute {
   public router: Router;
 
   constructor(
-    private controller: any,
-    private validationMiddleware: ValidationChain[]
+    protected controller: any,
+    protected validationMiddleware: ValidationChain[],
+    protected authValidationMiddleware: any,
+    protected roleValidationMiddleware: any
   ) {
     this.router = express.Router();
     this.initializeRoutes();
   }
 
-  private initializeRoutes() {
+  protected initializeRoutes() {
     // Get All Data
-    this.router.get("/", this.controller.list);
+    this.router.get(
+      "/",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
+      this.controller.list
+    );
 
     // Get All Records with soft deleted
-    this.router.get("/record", this.controller.record);
+    this.router.get(
+      "/record",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
+      this.controller.record
+    );
 
     // Get Detail Data by ID
-    this.router.get("/:id", this.controller.get);
+    this.router.get(
+      "/:id",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
+      this.controller.get
+    );
 
     // Get Detail Record with soft deleted by ID
-    this.router.get("/record/:id", this.controller.getRecord);
+    this.router.get(
+      "/record/:id",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
+      this.controller.getRecord
+    );
 
     // Create New Data
     this.router.post(
       "/",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
       this.validationMiddleware,
       handleValidation,
       this.controller.create
@@ -37,19 +61,36 @@ class BaseRoute {
     // Update Data by ID
     this.router.patch(
       "/:id",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
       this.validationMiddleware,
       handleValidation,
       this.controller.update
     );
 
     // Restore Data by ID
-    this.router.patch("/:id/restore", this.controller.restore);
+    this.router.patch(
+      "/:id/restore",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
+      this.controller.restore
+    );
 
     // Soft Delete Data by ID
-    this.router.delete("/:id", this.controller.softDelete);
+    this.router.delete(
+      "/:id",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
+      this.controller.softDelete
+    );
 
     // Hard Delete Data by ID
-    this.router.delete("/:id/hard", this.controller.hardDelete);
+    this.router.delete(
+      "/:id/hard",
+      this.authValidationMiddleware,
+      this.roleValidationMiddleware,
+      this.controller.hardDelete
+    );
   }
 }
 
