@@ -87,6 +87,13 @@ class BaseRepository<T> {
       .first();
   }
 
+  // Get Detail Data by Filter
+  public async filter(filter: string, value: string): Promise<T> {
+    return await knex(this.tableName)
+      .where({ [filter]: value })
+      .first();
+  }
+
   // Create Data
   public async create(data: T): Promise<void> {
     return await knex(this.tableName).insert(data);

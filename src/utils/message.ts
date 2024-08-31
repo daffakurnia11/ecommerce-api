@@ -1,3 +1,13 @@
+export const AUTH_MESSAGE = {
+  EMAIL_EXIST: "This account has already registered.",
+  REGISTERED: "Registered successfully.",
+  INVALID_CREDENTIALS: "Your credentials are invalid.",
+  LOGIN: "Successfully logged in.",
+  NO_TOKEN: "Refresh token not found.",
+  EXPIRED_TOKEN: "Refresh token is expired.",
+  REFRESHED: "Successfully refreshed token.",
+}
+
 export const PRODUCT_MESSAGE = {
   LIST: "Products retrieved successfully.",
   RECORD: "All Products retrieved successfully.",

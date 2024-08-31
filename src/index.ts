@@ -6,17 +6,42 @@ import { responseHandler } from "./middlewares/responseHandler";
 import { errorHandler } from "./middlewares/errorHandler";
 import { config } from "./config";
 
+import helmet from "helmet";
+import passport from "./config/passport";
+
 import ProductRoute from "./routes/ProductRoute";
+import AuthRoute from "./routes/AuthRoute";
 
 const app = express();
 const port = config.port;
 
 app.use(cors());
 
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        "default-src": ["'self'"],
+        "img-src": ["'self'", "https:"],
+        "script-src": ["'self'", "'unsafe-inline'"],
+      },
+    },
+    hsts: {
+      maxAge: 31536000, 
+      includeSubDomains: true,
+      preload: true,
+    },
+  })
+);
+
 app.use(bodyParser.json());
+
+app.use(passport.initialize());
 
 app.use(responseHandler);
 app.use("/api/product", ProductRoute.router);
+app.use("/api/auth", AuthRoute.router);
 app.use(errorHandler);
 
 app.listen(port, () => {
