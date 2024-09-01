@@ -12,6 +12,7 @@ import passport from "./config/passport";
 import ProductRoute from "./routes/ProductRoute";
 import AuthRoute from "./routes/AuthRoute";
 import AdminProductRoute from "./routes/AdminProductRoute";
+import CartRoute from "./routes/CartRoute";
 
 const app = express();
 const port = config.port;
@@ -43,6 +44,7 @@ app.use(passport.initialize());
 app.use(responseHandler);
 app.use("/api/product", ProductRoute.router);
 app.use("/api/auth", AuthRoute.router);
+app.use("/api/cart", CartRoute.router);
 app.use("/api/admin/product", AdminProductRoute.router);
 app.use(errorHandler);
 

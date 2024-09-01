@@ -20,7 +20,7 @@ class AuthController {
         res,
         next
       );
-      res.success(AUTH_MESSAGE.LOGIN, access_token, refresh_token);
+      res.success(AUTH_MESSAGE.LOGIN, { token: access_token }, refresh_token);
     } catch (error) {
       next(error);
     }
@@ -32,7 +32,9 @@ class AuthController {
 
       if (!refreshToken) throw new BadRequestError(AUTH_MESSAGE.NO_TOKEN);
 
-      const { access_token, refresh_token } = await AuthService.regenerateToken(refreshToken);
+      const { access_token, refresh_token } = await AuthService.regenerateToken(
+        refreshToken
+      );
       res.success(AUTH_MESSAGE.REFRESHED, access_token, refresh_token);
     } catch (error) {
       next(error);

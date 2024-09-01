@@ -19,6 +19,17 @@ export const PRODUCT_MESSAGE = {
   HARD_DELETED: "Product hard deleted successfully.",
 };
 
+export const CART_MESSAGE = {
+  LIST: "Carts retrieved successfully.",
+  RECORD: "All Carts retrieved successfully.",
+  DETAIL: "Detail Cart retrieved successfully.",
+  CREATED: "Cart created successfully.",
+  UPDATED: "Cart updated successfully.",
+  RESTORED: "Cart restored successfully.",
+  SOFT_DELETED: "Cart deleted successfully.",
+  HARD_DELETED: "Cart hard deleted successfully.",
+};
+
 export const ERROR_MESSAGE = {
   BAD_REQUEST: "Please provide valid data.",
   AUTHENTICATION_ERROR: "You are not authorized.",

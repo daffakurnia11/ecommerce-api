@@ -5,10 +5,12 @@ import { createPaginationMeta, getPaginationParams } from "../utils/pagination";
 
 abstract class BaseService<
   T extends Record<string, any>,
-  D extends Record<string, any>
+  D extends Record<string, any> = {}
 > {
   protected repository: any;
   protected detailRepository?: any;
+  protected abstract getMainKeys(): Array<keyof T>;
+  protected getRelationKeys?(): string;
 
   constructor(repository: any, detailRepository?: any) {
     this.repository = repository;
@@ -23,12 +25,7 @@ abstract class BaseService<
     const mainData: Partial<T> = {};
     const detailData: Partial<D> = {};
 
-    const mainKeys: Array<keyof T> = [
-      "name",
-      "price",
-      "available",
-      "base64_image",
-    ];
+    const mainKeys = this.getMainKeys();
     for (const key in data) {
       if (mainKeys.includes(key as keyof T)) {
         mainData[key as keyof T] = data[key as keyof T];
@@ -85,11 +82,11 @@ abstract class BaseService<
 
     await this.repository.create({ ...mainData, id });
 
-    if (this.detailRepository && detailData) {
+    if (this.detailRepository && detailData && this.getRelationKeys) {
       await this.detailRepository.create({
         ...detailData,
         id: uuidv7(),
-        product_id: id,
+        [this.getRelationKeys()]: id,
       });
     }
 

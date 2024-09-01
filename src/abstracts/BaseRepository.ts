@@ -5,7 +5,7 @@ interface BaseOption {
   identifier?: string;
 }
 
-class BaseRepository<T> {
+abstract class BaseRepository<T> {
   protected tableName: string;
   protected option?: BaseOption;
 

@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 
-class BaseController {
+abstract class BaseController {
   protected service: any;
   protected message: Record<string, string>;
+  protected getUserId?(req: Request): string;
 
   constructor(service: any, message: Record<string, string>) {
     this.service = service;
@@ -73,18 +74,27 @@ class BaseController {
 
   public async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await this.service.create(req.body);
-      res.created(this.message.CREATED, data);
+      const userId = this.getUserId ? this.getUserId(req) : undefined;
+      
+      const data = userId ? { ...req.body, user_id: userId } : req.body;
+      
+      const result = await this.service.create(data);
+      res.created(this.message.CREATED, result);
     } catch (error) {
       next(error);
     }
   }
-
+  
   public async update(req: Request, res: Response, next: NextFunction) {
     try {
+      const userId = this.getUserId ? this.getUserId(req) : undefined;
+    
+      const data = userId ? { ...req.body, user_id: userId } : req.body;
+
       const { id } = req.params;
-      const data = await this.service.update(id, req.body);
-      res.success(this.message.UPDATED, data);
+
+      const result = await this.service.update(id, data);
+      res.success(this.message.UPDATED, result);
     } catch (error) {
       next(error);
     }

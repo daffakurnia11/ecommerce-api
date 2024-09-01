@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import { handleValidation } from "../middlewares/validate";
 import { ValidationChain } from "express-validator";
 
-class BaseRoute {
+abstract class BaseRoute {
   public router: Router;
 
   constructor(
