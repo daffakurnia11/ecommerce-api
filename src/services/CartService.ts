@@ -1,6 +1,8 @@
 import BaseService from "../abstracts/BaseService";
+import { NotFoundError } from "../middlewares/errorHandler";
 import { Carts } from "../models/Cart";
 import CartRepository from "../repositories/CartRepository";
+import ProductRepository from "../repositories/ProductRepository";
 
 class CartService extends BaseService<Carts> {
   constructor() {
@@ -11,11 +13,23 @@ class CartService extends BaseService<Carts> {
     return ["user_id", "product_id", "quantity", "notes"];
   }
 
+  async create(data: Carts): Promise<Carts> {
+    const product = await ProductRepository.get(data.product_id);
+
+    if (!product) throw new NotFoundError("Product not found");
+    
+    return await super.create(data);
+  }
+
   // Override Update Data
   async update(
     id: string,
     data: Carts
   ): Promise<Carts> {
+    const product = await ProductRepository.get(data.product_id);
+
+    if (!product) throw new NotFoundError("Product not found");
+    
     if (data.quantity > 0) {
       await super.update(id, data);
     } else {
